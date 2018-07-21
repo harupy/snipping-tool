@@ -25,7 +25,7 @@ class SnippingWidget(QtWidgets.QWidget):
         self.is_snipping = True
         self.setWindowOpacity(0.3)
         QtWidgets.QApplication.setOverrideCursor(QtGui.QCursor(QtCore.Qt.CrossCursor))
-        self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
+        #self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
         print('Capture the screen...')
         print('Press q if you want to quit...')
         self.show()
@@ -84,7 +84,7 @@ class SnippingWidget(QtWidgets.QWidget):
         img = cv2.cvtColor(np.array(img), cv2.COLOR_BGR2RGB)
 
         # add to the snips list the object that opens a window of the image
-        SnippingWidget.snips.append(SnippingMenu.Menu(img, SnippingWidget.num_snip))
+        SnippingWidget.snips.append(SnippingMenu.Menu(img, SnippingWidget.num_snip, (x1, y1, x2, y2)))
 
 
 # if __name__ == '__main__':

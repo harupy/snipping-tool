@@ -7,7 +7,8 @@ import SnippingTool
 class Menu(QMainWindow):
 
     # The first initialization will always be without a snip, so put None in both arguments.
-    def __init__(self, numpy_image=None, snip_number=None):
+    # numpy_image is the desired image we want to display given as a numpy array.
+    def __init__(self, numpy_image=None, snip_number=None, start_position=(300, 300, 350, 250)):
         super().__init__()
         newAct = QAction('New', self)
         newAct.setShortcut('Ctrl+N')
@@ -24,8 +25,7 @@ class Menu(QMainWindow):
         toolbar.addAction(exitAct)
 
         self.snippingTool = SnippingTool.SnippingWidget()
-
-        self.setGeometry(300, 300, 350, 250)
+        self.setGeometry(*start_position)
         self.setWindowTitle('Snipping Tool')
 
         # From the second initialization, both arguments will be valid
@@ -49,10 +49,6 @@ class Menu(QMainWindow):
             self.close()
         self.snippingTool.start()
 
-    # quitting in the main menu will close all windows as well.
-    def closeEvent(self, event):
-        for snip in self.snippingTool.snips:
-            snip.close()
 
     @staticmethod
     def convert_numpy_img_to_qpixmap(np_img):
@@ -63,6 +59,5 @@ class Menu(QMainWindow):
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    ex = Menu()
-
+    menu = Menu()
     sys.exit(app.exec_())
