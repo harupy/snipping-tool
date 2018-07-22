@@ -7,6 +7,7 @@ from PyQt5.QtGui import QPixmap, QImage, QPainter, QPen
 import SnippingTool
 
 
+
 class Menu(QMainWindow):
 
     # The first initialization will always be without a snip, so put None in both arguments.
@@ -26,13 +27,11 @@ class Menu(QMainWindow):
 
         colorButton = QPushButton("Colors")
         menu = QMenu()
-        menu.addAction("red")
-        menu.addAction("black")
-        menu.addAction("blue")
+        menu.addAction("Red")
+        menu.addAction("Black")
+        menu.addAction("Blue")
         colorButton.setMenu(menu)
         menu.triggered.connect(lambda action: change_color(action.text()))
-
-
 
         exitAct = QAction('Exit', self)
         exitAct.setShortcut('Ctrl+Q')
@@ -59,7 +58,7 @@ class Menu(QMainWindow):
         self.show()
 
         def change_color(new_color):
-            self.brushColor = eval("Qt.{0}".format(new_color))
+            self.brushColor = eval("Qt.{0}".format(new_color.lower()))
 
     # snippingTool.start() will open a new window, so if this is the first snip, close the first window.
     def new_image_window(self):
@@ -69,20 +68,20 @@ class Menu(QMainWindow):
 
     def paintEvent(self, event):
         painter = QPainter(self)
-        rect = QRect(0, self.toolbar.height(), self.image.width(), self.image.height() + self.toolbar.height())
+        rect = QRect(0,  self.toolbar.height(), self.image.width(), self.image.height())
         painter.drawPixmap(rect, self.image)
 
     def mousePressEvent(self, event):
         if event.button() == Qt.LeftButton:
             self.drawing = True
-            self.lastPoint = event.pos()
+            self.lastPoint = event.pos() - QPoint(0, self.toolbar.height())
 
     def mouseMoveEvent(self, event):
         if event.buttons() and Qt.LeftButton and self.drawing:
             painter = QPainter(self.image)
             painter.setPen(QPen(self.brushColor, self.brushSize, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin))
-            painter.drawLine(self.lastPoint, event.pos())
-            self.lastPoint = event.pos()
+            painter.drawLine(self.lastPoint, event.pos() - QPoint(0, self.toolbar.height()))
+            self.lastPoint = event.pos() - QPoint(0, self.toolbar.height())
             self.update()
 
     def mouseReleaseEvent(self, event):
@@ -94,6 +93,8 @@ class Menu(QMainWindow):
         height, width, channel = np_img.shape
         bytesPerLine = 3 * width
         return QPixmap(QImage(np_img.data, width, height, bytesPerLine, QImage.Format_RGB888).rgbSwapped())
+
+
 
 
 if __name__ == '__main__':
