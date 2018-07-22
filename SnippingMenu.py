@@ -1,6 +1,9 @@
 import sys
-from PyQt5.QtWidgets import QAction, QWidget, QLabel, QMainWindow, QVBoxLayout, QApplication
-from PyQt5.QtGui import QPixmap, QImage
+
+from PyQt5.QtCore import QPoint, Qt
+from PyQt5.QtWidgets import QAction, QWidget, QLabel, QMainWindow, QVBoxLayout, QApplication, QPushButton, QMenu
+from PyQt5.QtGui import QPixmap, QImage, QPainter, QPen
+
 import SnippingTool
 
 
@@ -12,7 +15,15 @@ class Menu(QMainWindow):
         super().__init__()
         newAct = QAction('New', self)
         newAct.setShortcut('Ctrl+N')
+        newAct.setStatusTip('Snip!')
         newAct.triggered.connect(self.new_image_window)
+
+        colorButton = QPushButton("Colors")
+        menu = QMenu()
+        menu.addAction("Black")
+        menu.addAction("Red")
+        menu.addAction("Blue")
+        colorButton.setMenu(menu)
 
         exitAct = QAction('Exit', self)
         exitAct.setShortcut('Ctrl+Q')
@@ -22,25 +33,26 @@ class Menu(QMainWindow):
         self.statusBar()
         toolbar = self.addToolBar('Exit')
         toolbar.addAction(newAct)
+        toolbar.addWidget(colorButton)
         toolbar.addAction(exitAct)
 
         self.snippingTool = SnippingTool.SnippingWidget()
         self.setGeometry(*start_position)
-        self.setWindowTitle('Snipping Tool')
-
         # From the second initialization, both arguments will be valid
+
+        self.central_widget = QWidget()
+        self.setCentralWidget(self.central_widget)
+        lay = QVBoxLayout(self.central_widget)
+        label = QLabel(self)
         if numpy_image is not None and snip_number is not None:
+            self.image = self.convert_numpy_img_to_qpixmap(numpy_image)
             self.setWindowTitle("Snip #{0}".format(snip_number))
-            self.central_widget = QWidget()
-            self.setCentralWidget(self.central_widget)
-
-            lay = QVBoxLayout(self.central_widget)
-            label = QLabel(self)
-            pixmap = self.convert_numpy_img_to_qpixmap(numpy_image)
-            label.setPixmap(pixmap)
-            self.resize(pixmap.width(), pixmap.height())
-            lay.addWidget(label)
-
+        else:
+            self.image = QPixmap("background.PNG")
+            self.setWindowTitle("Snipping Tool")
+        label.setPixmap(self.image)
+        self.resize(self.image.width(), self.image .height())
+        lay.addWidget(label)
         self.show()
 
     # snippingTool.start() will open a new window, so if this is the first snip, close the first window.
@@ -48,7 +60,6 @@ class Menu(QMainWindow):
         if not self.snippingTool.snips:
             self.close()
         self.snippingTool.start()
-
 
     @staticmethod
     def convert_numpy_img_to_qpixmap(np_img):
@@ -59,5 +70,5 @@ class Menu(QMainWindow):
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    menu = Menu()
+    mainMenu = Menu()
     sys.exit(app.exec_())
