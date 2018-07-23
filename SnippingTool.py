@@ -7,9 +7,9 @@ import SnippingMenu
 
 
 class SnippingWidget(QtWidgets.QWidget):
-    snips = []
     num_snip = 0
     is_snipping = False
+    background = True
 
     def __init__(self):
         super().__init__()
@@ -22,8 +22,9 @@ class SnippingWidget(QtWidgets.QWidget):
         self.end = QtCore.QPoint()
 
     def start(self):
+        SnippingWidget.background = False
         SnippingWidget.is_snipping = True
-        SnippingWidget.setWindowOpacity(self, 0.3)
+        self.setWindowOpacity(0.3)
         QtWidgets.QApplication.setOverrideCursor(QtGui.QCursor(QtCore.Qt.CrossCursor))
         print('Capture the screen...')
         print('Press q if you want to quit...')
@@ -42,8 +43,7 @@ class SnippingWidget(QtWidgets.QWidget):
             lw = 0
             opacity = 0
 
-        SnippingWidget.setWindowOpacity(self, opacity)
-        #self.setWindowOpacity(opacity)
+        self.setWindowOpacity(opacity)
         qp = QtGui.QPainter(self)
         qp.setPen(QtGui.QPen(QtGui.QColor('black'), lw))
         qp.setBrush(QtGui.QColor(*brush_color))
@@ -81,4 +81,4 @@ class SnippingWidget(QtWidgets.QWidget):
         img = cv2.cvtColor(np.array(img), cv2.COLOR_BGR2RGB)
 
         # add to the snips list the object that opens a window of the image
-        SnippingWidget.snips.append(SnippingMenu.Menu(img, SnippingWidget.num_snip, (x1, y1, x2, y2)))
+        SnippingMenu.Menu(img, SnippingWidget.num_snip, (x1, y1, x2, y2))

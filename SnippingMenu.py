@@ -84,7 +84,7 @@ class Menu(QMainWindow):
 
     # snippingTool.start() will open a new window, so if this is the first snip, close the first window.
     def new_image_window(self):
-        if not self.snippingTool.snips:
+        if self.snippingTool.background:
             self.close()
         self.snippingTool.start()
 
