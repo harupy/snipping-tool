@@ -1,4 +1,4 @@
-# Regular Snipping Tool
+# Regular Snipping Tool (SnippingTool.py)
 [Link to the video on my YouTube channel](https://www.youtube.com/watch?v=e2zePSUGwaA).
 
 
