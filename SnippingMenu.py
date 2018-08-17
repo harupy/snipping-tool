@@ -20,7 +20,9 @@ class Menu(QMainWindow):
         self.brushSize = 3
         self.brushColor = Qt.red
         self.lastPoint = QPoint()
-
+        self.total_snips = 0
+        self.title = Menu.default_title
+        
         # New snip
         new_snip_action = QAction('New', self)
         new_snip_action.setShortcut('Ctrl+N')
@@ -86,6 +88,7 @@ class Menu(QMainWindow):
     def new_image_window(self):
         if self.snippingTool.background:
             self.close()
+        self.total_snips += 1
         self.snippingTool.start()
 
     def save_file(self):

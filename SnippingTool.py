@@ -4,6 +4,7 @@ import cv2
 from PIL import ImageGrab
 from PyQt5 import QtWidgets, QtCore, QtGui
 import SnippingMenu
+from PyQt5.QtCore import Qt
 
 
 class SnippingWidget(QtWidgets.QWidget):
@@ -11,17 +12,20 @@ class SnippingWidget(QtWidgets.QWidget):
     is_snipping = False
     background = True
 
-    def __init__(self):
-        super().__init__()
+    def __init__(self, parent=None):
+        super(SnippingWidget, self).__init__()
+        self.parent = parent
+        self.setWindowFlags(Qt.WindowStaysOnTopHint)
+
         root = tk.Tk()
         screen_width = root.winfo_screenwidth()
         screen_height = root.winfo_screenheight()
         self.setGeometry(0, 0, screen_width, screen_height)
-        self.setWindowTitle(' ')
         self.begin = QtCore.QPoint()
         self.end = QtCore.QPoint()
 
     def start(self):
+        self.setWindowFlags(Qt.WindowStaysOnTopHint)
         SnippingWidget.background = False
         SnippingWidget.is_snipping = True
         self.setWindowOpacity(0.3)
