@@ -124,6 +124,10 @@ class Menu(QMainWindow):
         if event.button == Qt.LeftButton:
             self.drawing = False
 
+    # TODO exit application when we exit all windows
+    def closeEvent(self, event):
+        event.accept()
+
     @staticmethod
     def convert_numpy_img_to_qpixmap(np_img):
         height, width, channel = np_img.shape
