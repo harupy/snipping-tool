@@ -1,5 +1,5 @@
 ## Regular Snipping Tool (SnippingTool.py)
-[Link to the video](https://www.youtube.com/watch?v=e2zePSUGwaA).
+Link to the video
 
 
 ## Multi window Snipping Tool with paint options (SnippingMenu.py + SnippingTool.py)
